@@ -15,6 +15,9 @@ def get_project_info():
         "Accept": "application/vnd.github.v4+json"
     }
     
+    # Ensure PROJECT_ID is not empty
+    project_number = PROJECT_ID if PROJECT_ID else "11"
+    
     query = """
     query($org: String!, $projectNumber: Int!) {
       organization(login: $org) {
@@ -44,10 +47,10 @@ def get_project_info():
     
     variables = {
         "org": ORG,
-        "projectNumber": int(PROJECT_ID)
+        "projectNumber": int(project_number)
     }
     
-    print(f"Querying project info with org: {ORG}, projectNumber: {PROJECT_ID}")
+    print(f"Querying project info with org: {ORG}, projectNumber: {project_number}")
     response = requests.post(url, headers=headers, json={"query": query, "variables": variables})
     print(f"Project info response: {response.status_code}")
     
@@ -57,7 +60,7 @@ def get_project_info():
         
         # Check if project exists
         if result.get("data", {}).get("organization", {}).get("projectV2") is None:
-            print(f"Project {PROJECT_ID} not found in organization {ORG}")
+            print(f"Project {project_number} not found in organization {ORG}")
             return None
             
         return result
