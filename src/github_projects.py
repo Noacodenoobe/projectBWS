@@ -1,28 +1,121 @@
 import os
 import requests
+import json
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 PROJECT_ID = os.getenv("GITHUB_PROJECT_ID")
-ORG = os.getenv("GITHUB_ORG")
-REPO = os.getenv("GITHUB_REPO")
+ORG = os.getenv("GITHUB_ORG", "Noacodenoobe")
+REPO = os.getenv("GITHUB_REPO", "projectBWS")
+
+def get_project_info():
+    """Pobiera informacje o projekcie GitHub"""
+    url = f"https://api.github.com/graphql"
+    headers = {
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v4+json"
+    }
+    
+    query = """
+    query($org: String!, $projectNumber: Int!) {
+      organization(login: $org) {
+        projectV2(number: $projectNumber) {
+          id
+          title
+          fields(first: 20) {
+            nodes {
+              ... on ProjectV2Field {
+                id
+                name
+              }
+              ... on ProjectV2SingleSelectField {
+                id
+                name
+                options {
+                  id
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    """
+    
+    variables = {
+        "org": ORG,
+        "projectNumber": int(PROJECT_ID) if PROJECT_ID else 11  # Default to project 11
+    }
+    
+    response = requests.post(url, headers=headers, json={"query": query, "variables": variables})
+    print(f"Project info response: {response.status_code}")
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error getting project info: {response.text}")
+        return None
 
 def create_project_item(title, assignee=None, status="Todo"):
-    url = f"https://api.github.com/projects/columns/{PROJECT_ID}/cards"
+    """Tworzy nowy element w projekcie GitHub"""
+    url = f"https://api.github.com/graphql"
     headers = {
-        "Authorization": f"token {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.inertia-preview+json"
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v4+json"
     }
-    data = {
-        "note": title
+    
+    # Najpierw pobierz informacje o projekcie
+    project_info = get_project_info()
+    if not project_info:
+        print("Nie udało się pobrać informacji o projekcie")
+        return False
+    
+    project_id = project_info["data"]["organization"]["projectV2"]["id"]
+    
+    # Mutacja do dodania elementu do projektu
+    mutation = """
+    mutation($projectId: ID!, $title: String!) {
+      addProjectV2DraftIssue(input: {
+        projectId: $projectId
+        title: $title
+      }) {
+        projectItem {
+          id
+        }
+      }
     }
-    response = requests.post(url, headers=headers, json=data)
-    print(response.status_code, response.text)
+    """
+    
+    variables = {
+        "projectId": project_id,
+        "title": title
+    }
+    
+    response = requests.post(url, headers=headers, json={"query": mutation, "variables": variables})
+    print(f"Create item response: {response.status_code}")
+    if response.status_code == 200:
+        result = response.json()
+        print(f"Successfully created item: {result}")
+        return True
+    else:
+        print(f"Error creating item: {response.text}")
+        return False
 
 if __name__ == "__main__":
-    # TODO: Załaduj zadania z pliku JSON lub wygenerowane przez LLM
+    print(f"Starting GitHub Projects import...")
+    print(f"ORG: {ORG}")
+    print(f"REPO: {REPO}")
+    print(f"PROJECT_ID: {PROJECT_ID}")
+    
+    # Testowe zadania
     tasks = [
         {"title": "Przygotować środowisko Docker", "assignee": None, "status": "Todo"},
-        {"title": "Skonfigurować Whisper.cpp", "assignee": "Noacodenoobe", "status": "In Progress"}
+        {"title": "Skonfigurować Whisper.cpp", "assignee": "Noacodenoobe", "status": "In Progress"},
+        {"title": "Naprawić GitHub Actions workflow", "assignee": None, "status": "Todo"}
     ]
+    
+    success_count = 0
     for task in tasks:
-        create_project_item(task["title"], task.get("assignee"), task.get("status"))
+        if create_project_item(task["title"], task.get("assignee"), task.get("status")):
+            success_count += 1
+    
+    print(f"Import completed. Successfully created {success_count}/{len(tasks)} items.")

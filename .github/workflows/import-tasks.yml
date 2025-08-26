@@ -16,6 +16,8 @@ jobs:
         run: pip install requests
       - name: Run import script
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          GITHUB_ORG: ${{ github.repository_owner }}
+          GITHUB_REPO: ${{ github.event.repository.name }}
         run: python src/github_projects.py
