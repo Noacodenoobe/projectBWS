@@ -2,9 +2,6 @@ name: Import Tasks to GitHub Projects
 
 on:
   push:
-    paths:
-      - "project/tasks.md"
-      - "data/example_report.md"
 
 jobs:
   import_tasks:
