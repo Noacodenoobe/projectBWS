@@ -41,5 +41,5 @@ files/data/sample_report.md,unknown,md,unknown,unknown
 files/agent_config/agent_rules.md,A,md,unknown,unknown
 files/agent_config/prompts/action_items_to_json.md,A,md,unknown,unknown
 files/agent_config/prompts/project_summary.md,A,md,unknown,unknown
-files/.github/workflows/import-tasks.yml,A,yml,unknown,unknown
+.github/workflows/import-tasks.yml,A,yml,unknown,unknown
 files/docs/README.md,unknown,md,unknown,unknown
