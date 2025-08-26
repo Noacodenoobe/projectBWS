@@ -158,6 +158,11 @@ Based on `cursor_analiza_plik_w_i_struktura_githu.md`, the AI-Ops model incorpor
 - **Field Creation**: `gh project field create <field-name> --project-id <id> --owner="<username or org>" --data-type "<type>"` for custom fields.
 - **Issue Management**: Creating, adding, and updating issues within the project board.
 
+### Project Status
+- **Project Name**: BWS-AI-Ops-Project
+- **Project URL**: https://github.com/users/Noacodenoobe/projects/11
+- **Creation Command**: `gh project create --owner "@me" --title "BWS-AI-Ops-Project"`
+
 ### Automation and Workflows:
 - The plan emphasizes setting up automation and workflows using GitHub Actions to streamline project management tasks.
 

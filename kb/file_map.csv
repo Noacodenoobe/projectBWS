@@ -16,7 +16,6 @@ settings.json,A,json,unknown,unknown
 schemat agenta.png,A,png,unknown,unknown
 repository_analysis_report.md,A,md,unknown,unknown
 README.md,unknown,md,unknown,unknown
-project_summary.md,A,md,unknown,unknown
 personal-assistant-architecture.md,A,md,unknown,unknown
 Personal Assistant.json,A,json,unknown,unknown
 pdf-ai-agent-army.txt,A,txt,unknown,unknown
@@ -24,23 +23,35 @@ mindmap-2025-08-21T19-49-33.png,B,png,unknown,unknown
 MASTER PROMPT v2 Autonomiczna.pdf,A,pdf,unknown,unknown
 cursor_analiza_plik_w_i_struktura_githu.md,A,md,unknown,unknown
 ale przecież cursor agent może utwórzyć to repozy....pdf,unknown,pdf,unknown,unknown
-agent_rules.md,A,md,unknown,unknown
 AI_Project_Management (1).md,A,md,unknown,unknown
-action_items_to_json.md,A,md,unknown,unknown
 ai agent army in n8n.pdf,A,pdf,unknown,unknown
 N/A (extracted to directory),B,md,unknown,unknown
-files/src/markdown_to_json.py,unknown,py,unknown,unknown
-files/src/github_projects_importer.py,unknown,py,unknown,unknown
-files/src/github_projects.py,unknown,py,unknown,unknown
-files/requirements.txt,unknown,txt,unknown,unknown
-files/project/plan.md,unknown,md,unknown,unknown
-files/project/architecture.md,unknown,md,unknown,unknown
-files/agent_config/settings.json,A,json,unknown,unknown
-files/data/sample_tasks.json,unknown,json,unknown,unknown
-files/data/sample_report.md,unknown,md,unknown,unknown
-files/agent_config/agent_rules.md,A,md,unknown,unknown
-files/agent_config/prompts/action_items_to_json.md,A,md,unknown,unknown
-files/agent_config/prompts/project_summary.md,A,md,unknown,unknown
 .github/workflows/import-tasks.yml,A,yml,unknown,unknown
-files/docs/README.md,unknown,md,unknown,unknown
 project/tasks.md,A,md,unknown,unknown
+agent_config/agent_rules.md,A,md,unknown,unknown
+agent_config/prompts/action_items_to_json.md,A,md,unknown,unknown
+agent_config/prompts/project_summary.md,A,md,unknown,unknown
+agent_config/settings.json,A,json,unknown,unknown
+data/sample_report.md,unknown,md,unknown,unknown
+data/sample_tasks.json,unknown,json,unknown,unknown
+docs/_converted/files/agent_config/agent_rules.md,A,md,unknown,unknown
+docs/_converted/files/agent_config/prompts/action_items_to_json.md,A,md,unknown,unknown
+docs/_converted/files/agent_config/prompts/project_summary.md,A,md,unknown,unknown
+docs/_converted/files/agent_config/settings.json,A,json,unknown,unknown
+docs/_converted/files/data/sample_report.md,unknown,md,unknown,unknown
+docs/_converted/files/data/sample_tasks.json,unknown,json,unknown,unknown
+docs/_converted/files/docs/README.md,unknown,md,unknown,unknown
+docs/_converted/files/project/architecture.md,unknown,md,unknown,unknown
+docs/_converted/files/project/plan.md,unknown,md,unknown,unknown
+docs/_converted/files/requirements.txt,unknown,txt,unknown,unknown
+docs/_converted/files/src/github_projects_importer.py,unknown,py,unknown,unknown
+docs/_converted/files/src/github_projects.py,unknown,py,unknown,unknown
+docs/_converted/files/src/markdown_to_json.py,unknown,py,unknown,unknown
+docs/inbox/,unknown,dir,unknown,unknown
+docs/README.md,unknown,md,unknown,unknown
+files/project/architecture.md,unknown,md,unknown,unknown
+files/project/plan.md,unknown,md,unknown,unknown
+files/requirements.txt,unknown,txt,unknown,unknown
+src/github_projects_importer.py,unknown,py,unknown,unknown
+src/github_projects.py,unknown,py,unknown,unknown
+src/markdown_to_json.py,unknown,py,unknown,unknown

@@ -256,6 +256,25 @@ Potrzebna decyzja: która wartość obowiązuje?
 Opcje: [5 m] [4.5 m] [Inna: ___]
 Po decyzji: odblokuję Issues #123, #124 (cięcie paneli, BOM).
 
+## Extraction Prompts
+
+You are a data extraction specialist. Your task is to extract all tasks from the "Action Items" table in the following Markdown report and convert them to a clean JSON array.
+Each object should have: "title" (from the 'Zadanie' column), "assignee" (from 'Kto?'), "due_date" (from 'Kiedy?'), "priority" (from 'Priorytet'). If any value is missing, use null.
+Return ONLY a valid JSON array, no extra text.
+
+--- REPORT START ---
+{{report_content}}
+--- REPORT END ---
+
+## Summary Prompts
+
+You are an expert in summarizing project meeting notes. Read the full transcript and provide a concise summary in Polish, including:
+- Najważniejsze decyzje
+- Najważniejsze ryzyka
+- Kluczowe zadania do wykonania
+
+Zwróć tekst w formacie Markdown z wyraźnymi nagłówkami.
+
 🧪 Jak uruchomić (dla agenta)
 
 Wczytaj repo i wykonaj Fazę 0 (ingest, OCR, file_map).
