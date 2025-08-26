@@ -2,6 +2,9 @@ name: Import Tasks to GitHub Projects
 
 on:
   push:
+    paths:
+      - "project/tasks.md"
+      - "data/example_report.md"
 
 permissions:
   contents: read
@@ -11,18 +14,23 @@ permissions:
 jobs:
   import_tasks:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+          
       - name: Install dependencies
         run: pip install requests
+        
       - name: Run import script
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          GITHUB_PROJECT_ID: "PVT_kwHODCDy484BBiAA"  # Node ID of the project
           GITHUB_ORG: ${{ github.repository_owner }}
           GITHUB_REPO: ${{ github.event.repository.name }}
         run: python src/github_projects.py
