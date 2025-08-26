@@ -21,4 +21,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           GITHUB_PROJECT_ID: ${{ secrets.PROJECT_ID }}
-        run: python files/src/github_projects.py
+        run: python src/github_projects.py
