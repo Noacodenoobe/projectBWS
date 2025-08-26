@@ -3,7 +3,7 @@ import requests
 import json
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-PROJECT_ID = os.getenv("GITHUB_PROJECT_ID")
+PROJECT_ID = os.getenv("GITHUB_PROJECT_ID", "11")  # Default to project 11
 ORG = os.getenv("GITHUB_ORG", "Noacodenoobe")
 REPO = os.getenv("GITHUB_REPO", "projectBWS")
 
@@ -44,13 +44,23 @@ def get_project_info():
     
     variables = {
         "org": ORG,
-        "projectNumber": int(PROJECT_ID) if PROJECT_ID else 11  # Default to project 11
+        "projectNumber": int(PROJECT_ID)
     }
     
+    print(f"Querying project info with org: {ORG}, projectNumber: {PROJECT_ID}")
     response = requests.post(url, headers=headers, json={"query": query, "variables": variables})
     print(f"Project info response: {response.status_code}")
+    
     if response.status_code == 200:
-        return response.json()
+        result = response.json()
+        print(f"Project info result: {json.dumps(result, indent=2)}")
+        
+        # Check if project exists
+        if result.get("data", {}).get("organization", {}).get("projectV2") is None:
+            print(f"Project {PROJECT_ID} not found in organization {ORG}")
+            return None
+            
+        return result
     else:
         print(f"Error getting project info: {response.text}")
         return None
@@ -69,7 +79,13 @@ def create_project_item(title, assignee=None, status="Todo"):
         print("Nie udało się pobrać informacji o projekcie")
         return False
     
-    project_id = project_info["data"]["organization"]["projectV2"]["id"]
+    try:
+        project_id = project_info["data"]["organization"]["projectV2"]["id"]
+        print(f"Found project ID: {project_id}")
+    except (KeyError, TypeError) as e:
+        print(f"Error extracting project ID: {e}")
+        print(f"Project info structure: {json.dumps(project_info, indent=2)}")
+        return False
     
     # Mutacja do dodania elementu do projektu
     mutation = """
@@ -90,8 +106,10 @@ def create_project_item(title, assignee=None, status="Todo"):
         "title": title
     }
     
+    print(f"Creating item with title: {title}")
     response = requests.post(url, headers=headers, json={"query": mutation, "variables": variables})
     print(f"Create item response: {response.status_code}")
+    
     if response.status_code == 200:
         result = response.json()
         print(f"Successfully created item: {result}")
