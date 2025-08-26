@@ -3,74 +3,36 @@ import requests
 import json
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-PROJECT_ID = os.getenv("GITHUB_PROJECT_ID", "PVT_kwHODCDy484BBiAA")  # Use Node ID instead of number
+PROJECT_ID = os.getenv("GITHUB_PROJECT_ID", "11")  # Back to project number
 ORG = os.getenv("GITHUB_ORG", "Noacodenoobe")
 REPO = os.getenv("GITHUB_REPO", "projectBWS")
 
 def get_project_info():
-    """Pobiera informacje o projekcie GitHub używając Node ID"""
-    url = f"https://api.github.com/graphql"
+    """Pobiera informacje o projekcie GitHub używając REST API v1"""
+    url = f"https://api.github.com/projects/{PROJECT_ID}"
     headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.v4+json"
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.inertia-preview+json"
     }
 
-    # Use Node ID to query project directly
-    query = """
-    query($projectId: ID!) {
-      node(id: $projectId) {
-        ... on ProjectV2 {
-          id
-          title
-          fields(first: 20) {
-            nodes {
-              ... on ProjectV2Field {
-                id
-                name
-              }
-              ... on ProjectV2SingleSelectField {
-                id
-                name
-                options {
-                  id
-                  name
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    """
-
-    variables = {
-        "projectId": PROJECT_ID
-    }
-
-    print(f"Querying project info with Node ID: {PROJECT_ID}")
-    response = requests.post(url, headers=headers, json={"query": query, "variables": variables})
+    print(f"Querying project info with project ID: {PROJECT_ID}")
+    response = requests.get(url, headers=headers)
     print(f"Project info response: {response.status_code}")
 
     if response.status_code == 200:
         result = response.json()
         print(f"Project info result: {json.dumps(result, indent=2)}")
-
-        # Check if project exists
-        if result.get("data", {}).get("node") is None:
-            print(f"Project with Node ID {PROJECT_ID} not found")
-            return None
-
         return result
     else:
         print(f"Error getting project info: {response.text}")
         return None
 
 def create_project_item(title, assignee=None, status="Todo"):
-    """Tworzy nowy element w projekcie GitHub"""
-    url = f"https://api.github.com/graphql"
+    """Tworzy nowy element w projekcie GitHub używając REST API v1"""
+    url = f"https://api.github.com/projects/columns"
     headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.v4+json"
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.inertia-preview+json"
     }
 
     # Najpierw pobierz informacje o projekcie
@@ -80,42 +42,47 @@ def create_project_item(title, assignee=None, status="Todo"):
         return False
 
     try:
-        project_id = project_info["data"]["node"]["id"]
+        project_id = project_info["id"]
         print(f"Found project ID: {project_id}")
     except (KeyError, TypeError) as e:
         print(f"Error extracting project ID: {e}")
         print(f"Project info structure: {json.dumps(project_info, indent=2)}")
         return False
 
-    # Mutacja do dodania elementu do projektu
-    mutation = """
-    mutation($projectId: ID!, $title: String!) {
-      addProjectV2DraftIssue(input: {
-        projectId: $projectId
-        title: $title
-      }) {
-        projectItem {
-          id
-        }
-      }
+    # Pobierz kolumny projektu
+    columns_url = f"https://api.github.com/projects/{project_id}/columns"
+    columns_response = requests.get(columns_url, headers=headers)
+    
+    if columns_response.status_code != 200:
+        print(f"Error getting project columns: {columns_response.text}")
+        return False
+    
+    columns = columns_response.json()
+    if not columns:
+        print("No columns found in project")
+        return False
+    
+    # Użyj pierwszej kolumny (zazwyczaj "To Do")
+    first_column = columns[0]
+    column_id = first_column["id"]
+    print(f"Using column: {first_column['name']} (ID: {column_id})")
+
+    # Utwórz kartę w kolumnie
+    card_url = f"https://api.github.com/projects/columns/{column_id}/cards"
+    card_data = {
+        "note": title
     }
-    """
 
-    variables = {
-        "projectId": project_id,
-        "title": title
-    }
+    print(f"Creating card with title: {title}")
+    card_response = requests.post(card_url, headers=headers, json=card_data)
+    print(f"Create card response: {card_response.status_code}")
 
-    print(f"Creating item with title: {title}")
-    response = requests.post(url, headers=headers, json={"query": mutation, "variables": variables})
-    print(f"Create item response: {response.status_code}")
-
-    if response.status_code == 200:
-        result = response.json()
-        print(f"Successfully created item: {result}")
+    if card_response.status_code == 201:
+        result = card_response.json()
+        print(f"Successfully created card: {result}")
         return True
     else:
-        print(f"Error creating item: {response.text}")
+        print(f"Error creating card: {card_response.text}")
         return False
 
 if __name__ == "__main__":
