@@ -3,6 +3,10 @@ name: Import Tasks to GitHub Projects
 on:
   push:
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   import_tasks:
     runs-on: ubuntu-latest
