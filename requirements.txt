@@ -1,0 +1,7 @@
+html2text
+# For PDF and PNG conversion, you also need to install Tesseract OCR:
+# Windows: https://tesseract-ocr.github.io/tessdoc/Downloads.html
+# Linux: sudo apt-get install tesseract-ocr
+# Mac: brew install tesseract
+# And install the Python wrapper for Tesseract if not already installed:
+# pip install pytesseract

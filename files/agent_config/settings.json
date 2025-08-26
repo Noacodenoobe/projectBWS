@@ -1,0 +1,8 @@
+{
+  "default_language_model": "bielik-7b",
+  "fallback_model": "llama3-70b",
+  "summarization_model": "bielik-7b",
+  "data_extraction_model": "gpt-4",
+  "code_generation_model": "gpt-4",
+  "prompt_dir": "agent_config/prompts/"
+}

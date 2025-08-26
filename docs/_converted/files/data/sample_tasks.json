@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Przygotować środowisko",
+    "assignee": "Jan Kowalski",
+    "due_date": "2024-09-01",
+    "priority": "Wysoki"
+  },
+  {
+    "title": "Skonfigurować Whisper",
+    "assignee": "Anna Nowak",
+    "due_date": "2024-09-03",
+    "priority": "Średni"
+  },
+  {
+    "title": "Testy integracyjne",
+    "assignee": null,
+    "due_date": "2024-09-10",
+    "priority": "Niski"
+  }
+]
