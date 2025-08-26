@@ -168,3 +168,11 @@ Based on `cursor_analiza_plik_w_i_struktura_githu.md`, the AI-Ops model incorpor
 ### `schemat agenta.png`
 
 This PNG file, identified as a source for AI-Ops model information, could not be processed for meaningful content due to its image format and the previously encountered issues with OCR conversion. Therefore, its content is not reflected in `kb/ops_model.md`.
+
+### [BLOCKING QUESTION]
+Scope: A (AI-Ops)
+Temat: Instalacja Tesseract OCR
+Problem: Pliki PDF (`MASTER PROMPT v2 Autonomiczna.pdf`, `Szczegółowe Opracowanie... Fabryka Agentów AI.pdf`, `ai agent army in n8n.pdf`, `ale przecież cursor agent może utwórzyć to repozy....pdf`) oraz pliki PNG (`schemat agenta.png`, `mindmap-2025-08-21T19-49-33.png`) nie mogły zostać skonwertowane do Markdown ze względu na brak zainstalowanego Tesseract OCR na systemie operacyjnym.
+Potrzebna decyzja: Instalacja Tesseract OCR przez użytkownika.
+Opcje: [Zainstaluj Tesseract OCR ręcznie (zgodnie z instrukcjami w `requirements.txt`)] [Kontynuuj bez pełnego przetworzenia plików binarnych (przyjmując, że ich zawartość nie będzie w pełni dostępna w bazie wiedzy)]
+Po decyzji: Po zainstalowaniu Tesseract OCR, proszę daj mi znać. Wtedy uruchomię ponownie skrypt `converter.py` w celu przetworzenia tych plików.
