@@ -18,9 +18,10 @@ def get_project_info():
     # Ensure PROJECT_ID is not empty
     project_number = PROJECT_ID if PROJECT_ID else "11"
     
+    # Use user endpoint instead of organization
     query = """
-    query($org: String!, $projectNumber: Int!) {
-      organization(login: $org) {
+    query($user: String!, $projectNumber: Int!) {
+      user(login: $user) {
         projectV2(number: $projectNumber) {
           id
           title
@@ -46,11 +47,11 @@ def get_project_info():
     """
     
     variables = {
-        "org": ORG,
+        "user": ORG,
         "projectNumber": int(project_number)
     }
     
-    print(f"Querying project info with org: {ORG}, projectNumber: {project_number}")
+    print(f"Querying project info with user: {ORG}, projectNumber: {project_number}")
     response = requests.post(url, headers=headers, json={"query": query, "variables": variables})
     print(f"Project info response: {response.status_code}")
     
@@ -59,8 +60,8 @@ def get_project_info():
         print(f"Project info result: {json.dumps(result, indent=2)}")
         
         # Check if project exists
-        if result.get("data", {}).get("organization", {}).get("projectV2") is None:
-            print(f"Project {project_number} not found in organization {ORG}")
+        if result.get("data", {}).get("user", {}).get("projectV2") is None:
+            print(f"Project {project_number} not found for user {ORG}")
             return None
             
         return result
@@ -83,7 +84,7 @@ def create_project_item(title, assignee=None, status="Todo"):
         return False
     
     try:
-        project_id = project_info["data"]["organization"]["projectV2"]["id"]
+        project_id = project_info["data"]["user"]["projectV2"]["id"]
         print(f"Found project ID: {project_id}")
     except (KeyError, TypeError) as e:
         print(f"Error extracting project ID: {e}")
